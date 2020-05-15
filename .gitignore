@@ -1,0 +1,10 @@
+node_modules/
+reports/
+dist/
+.DS_Store
+.idea
+.scannerwork
+.vscode/
+Thumbs.db
+lerna-debug.log
+package-lock.json
