@@ -4,6 +4,7 @@
   "description": "testing pollyjs recordings with typescript",
   "main": "index.js",
   "scripts": {
+    "test": "ts-mocha -p tsconfig.json --opts ./tests/mocha.opts",
     "test:mocha": "mocha -r ts-node/register **/*.ts -t 120000"
   },
   "author": "",
