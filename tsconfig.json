@@ -25,5 +25,6 @@
     "removeComments": true,
     "sourceMap": true,
     "baseUrl": "."
-  }
+  },
+  "exclude": ["node_modules"]
 }

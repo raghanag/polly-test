@@ -2,8 +2,26 @@ import { WebDriver, Builder, Capabilities, By} from 'selenium-webdriver';
 import { should } from 'chai';
 should();
 require('chromedriver');
+const NodeHttpAdapter = require('@pollyjs/adapter-node-http');
 
+const { Polly, setupMocha: setupPolly } = require('@pollyjs/core');
+const FSPersister = require('@pollyjs/persister-fs');
+const path = require('path');
+Polly.register(NodeHttpAdapter);
+Polly.register(FSPersister);
 describe('Selenium Demo Test Suite', () => {
+  setupPolly({
+    /* default configuration options */
+    recordIfMissing: true,
+    mode: 'record',
+    persister: 'fs',
+    adapters: ['node-http'],
+    persisterOptions: {
+      fs: {
+        recordingsDir: path.resolve(__dirname, '../recordings')
+      }
+    }
+  });
     let driver:WebDriver;
     // time out for test execution
     const TIMEOUT = 1200000;
