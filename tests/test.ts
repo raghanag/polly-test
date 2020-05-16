@@ -6,12 +6,14 @@ require('chromedriver');
 describe('Selenium Demo Test Suite', () => {
     let driver:WebDriver;
     // time out for test execution
-    
+    const TIMEOUT = 1200000;
     beforeEach(async () => {
       // initializing chrome driver
       driver = await new Builder()
           .withCapabilities(Capabilities.chrome())
           .build();
+      await driver.manage().setTimeouts( { implicit: TIMEOUT, pageLoad: 
+        TIMEOUT, script: TIMEOUT } );
       await driver.manage().window().maximize();
     });
 
