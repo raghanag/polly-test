@@ -13,12 +13,25 @@ describe('Selenium Demo Test Suite', () => {
   setupPolly({
     /* default configuration options */
     recordIfMissing: true,
-    mode: 'record',
+    mode: 'replay',
     persister: 'fs',
     adapters: ['node-http'],
     persisterOptions: {
       fs: {
         recordingsDir: path.resolve(__dirname, '../recordings')
+      }
+    },
+    matchRequestsBy: {
+      headers(headers:Record<string, string>) {
+        // `host` is unstable since the port changes between every run
+        // probably configurable with Selenium to make it stable?
+        delete headers.host;
+        
+        return headers;
+      },
+      url: {
+        // same reason as above
+        port: false,
       }
     }
   });
@@ -39,12 +52,12 @@ describe('Selenium Demo Test Suite', () => {
       await driver.quit();
     });
 
-    it('should search for hello at google.com', async () => {
-        let Url:string = 'http://www.google.com';
+    it('should search for hello at localhost', async () => {
+        let Url:string = 'http://localhost:3000';
         await driver.get(Url);
-        let searchBox = await driver.findElement(By.name('q'));
-        await searchBox.sendKeys('hello');
-        let value = await  searchBox.getAttribute('value');
-        value.should.equal('hello');
+        let p = await driver.findElement(By.id('naga'));
+        console.log(p);
+        let value = await  p.getText();
+        value.should.equal('Hello From Express');
     });
 });
