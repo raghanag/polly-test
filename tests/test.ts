@@ -12,7 +12,7 @@ Polly.register(FSPersister);
 let browser:any;
 let page:any;
 let context:any;
-describe('Selenium Demo Test Suite', async () => {
+describe('Puppeteer Suite', async () => {
   
   beforeEach(async () => {
     browser = await puppeteer.launch();
@@ -65,6 +65,6 @@ describe('Selenium Demo Test Suite', async () => {
       // await expect(header).toMatch('Users');
   
       // Wait for all requests to resolve, this can also be replaced with
-      // await context.polly.flush();
+      await context.polly.flush();
     });
 });
