@@ -11,36 +11,12 @@ Polly.register(PuppeteerAdapter);
 Polly.register(FSPersister);
 let browser:any;
 let page:any;
-let context:any;
+let polly:any;
 describe('Puppeteer Suite', async () => {
-  
+  polly = setupPolly();
   beforeEach(async () => {
     browser = await puppeteer.launch();
     page = await browser.newPage();
-    context = setupPolly({
-      adapters: ['puppeteer'],
-      mode: 'record',
-      adapterOptions: { puppeteer: { page } },
-      persister: 'fs',
-      persisterOptions: {
-        fs: {
-          recordingsDir: path.resolve(__dirname, '../__recordings__')
-        }
-      },
-      matchRequestsBy: {
-        headers: {
-          exclude: ['user-agent']
-        }
-      }
-    });
-    // await page.setRequestInterception(true);
-
-    // const { server } = context.polly;
-
-    // server.host('http://localhost:3000', () => {
-    //   server.get('/sockjs-node/*').intercept((_:any, res:any) => res.sendStatus(200));
-    // });
-
     await page.goto('http://localhost:3000', { waitUntil: 'networkidle0' });
   });
 
@@ -49,6 +25,23 @@ describe('Puppeteer Suite', async () => {
     });
 
     it('should be able to navigate to all routes', async () => {
+      polly.configure({
+        recordIfMissing: true,
+        adapters: ['puppeteer'],
+        mode: 'record',
+        adapterOptions: { puppeteer: { page } },
+        persister: 'fs',
+        persisterOptions: {
+          fs: {
+            recordingsDir: path.resolve(__dirname, '../__recordings__')
+          }
+        },
+        matchRequestsBy: {
+          headers: {
+            exclude: ['user-agent']
+          }
+        }
+      })
       const header = await page.$eval('h2', (element:any) => {
         return element.innerText;
       });
@@ -65,6 +58,6 @@ describe('Puppeteer Suite', async () => {
       // await expect(header).toMatch('Users');
   
       // Wait for all requests to resolve, this can also be replaced with
-      await context.polly.flush();
+      await polly.flush();
     });
 });
