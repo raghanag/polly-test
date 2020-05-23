@@ -54,7 +54,7 @@ describe('Selenium Demo Test Suite', async () => {
       });
   
       // await expect(page).toMatchElement('tbody > tr', { timeout: 5000 });
-      expect(header).to.equal('Employees');
+      expect(header).to.equal('Posts');
   
       // await expect(page).toClick('a', { text: 'Todos' });
       // await expect(page).toMatchElement('tbody > tr', { timeout: 5000 });
@@ -65,6 +65,6 @@ describe('Selenium Demo Test Suite', async () => {
       // await expect(header).toMatch('Users');
   
       // Wait for all requests to resolve, this can also be replaced with
-      await context.polly.flush();
+      // await context.polly.flush();
     });
 });
