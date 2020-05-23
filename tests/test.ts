@@ -11,43 +11,45 @@ Polly.register(PuppeteerAdapter);
 Polly.register(FSPersister);
 let browser:any;
 let page:any;
-let polly:any;
-describe('Puppeteer Suite', async () => {
-  polly = setupPolly();
-  beforeEach(async () => {
+describe('Puppeteer Suite', async function() {
+  setupPolly();
+  beforeEach(async function(){
     browser = await puppeteer.launch();
     page = await browser.newPage();
-    await page.goto('http://localhost:3000', { waitUntil: 'networkidle0' });
+    await page.setRequestInterception(true);
+
+    this.polly.configure({
+      recordIfMissing: true,
+      adapters: ['puppeteer'],
+      mode: 'record',
+      adapterOptions: { puppeteer: { page } },
+      persister: 'fs',
+      persisterOptions: {
+        fs: {
+          recordingsDir: path.resolve(__dirname, '../recordings')
+        }
+      },
+      matchRequestsBy: {
+        headers: {
+          exclude: ['user-agent']
+        }
+      }
+    });
+    await page.goto('http://localhost:3000', {waitUntil: 'load', timeout: 0});
   });
 
-    afterEach(async () => {
+    afterEach(async function() {
       await browser.close();
     });
 
-    it('should be able to navigate to all routes', async () => {
-      polly.configure({
-        recordIfMissing: true,
-        adapters: ['puppeteer'],
-        mode: 'record',
-        adapterOptions: { puppeteer: { page } },
-        persister: 'fs',
-        persisterOptions: {
-          fs: {
-            recordingsDir: path.resolve(__dirname, '../__recordings__')
-          }
-        },
-        matchRequestsBy: {
-          headers: {
-            exclude: ['user-agent']
-          }
-        }
-      })
+    it('should be able to navigate to all routes', async function() {
+      // await page.setRequestInterception(true);
       const header = await page.$eval('h2', (element:any) => {
         return element.innerText;
       });
   
       // await expect(page).toMatchElement('tbody > tr', { timeout: 5000 });
-      expect(header).to.equal('Posts');
+      expect(header).to.equal('Employees');
   
       // await expect(page).toClick('a', { text: 'Todos' });
       // await expect(page).toMatchElement('tbody > tr', { timeout: 5000 });
@@ -58,6 +60,6 @@ describe('Puppeteer Suite', async () => {
       // await expect(header).toMatch('Users');
   
       // Wait for all requests to resolve, this can also be replaced with
-      await polly.flush();
+      await this.polly.flush();
     });
 });
