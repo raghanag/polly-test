@@ -1,14 +1,12 @@
 {
-  "reporterEnabled": "mocha-sonarqube-reporter, mochawesome",
-  "mochaSonarqubeReporterReporterOptions": {
-    "output": "reports/sonar/qa-test-results.xml"
-  },
+  "reporterEnabled": "mochawesome",
   "mochawesomeReporterOptions": {
     "reportDir": "reports/html",
     "reportFilename": "index",
     "reportTitle": "Tests",
     "reportPageTitle": "Tests",
     "charts": true,
-    "showSkipped": true
+    "showSkipped": true,
+    "json": false
   }
 }

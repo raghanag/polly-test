@@ -1,5 +1,4 @@
 --timeout=1200000
---reporter mocha-multi-reporters
 --reporter-options configFile=./tests/report-config.json
 **/*.ts
 --exclude node_modules/**
